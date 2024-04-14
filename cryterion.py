@@ -13,7 +13,9 @@ from typing import Tuple
 
 if machine().lower().startswith("arm"):
     if platform.system() == 'Darwin':
-        pass
+        import sys
+        sys.path.insert(0, '/Users/urjasvisuthar/BTP/end_game/repos/temp/applecounter')
+        from apple_counter import *
     else:
         from cyclops.cyclops import Cyclops
 else:
@@ -136,11 +138,15 @@ def benchmark_fn(
     gc_old = gc.isenabled()
     gc.disable()
 
+    apple_counter = AppleCounter()
+
     tracemalloc.start()
     start_time = time.process_time_ns()
 
     #with Cyclops() as cyclops:
+    start_cycles = apple_counter.get_counter()
     result = fn(data)
+    end_cycles = apple_counter.get_counter()
 
     duration = time.process_time_ns() - start_time
     _, peak = tracemalloc.get_traced_memory()
@@ -150,7 +156,7 @@ def benchmark_fn(
         gc.enable()
 
     data_size = len(data)
-    clock_cycles = 1000 #cyclops.cycles
+    clock_cycles = AppleCounter.get_results(start_cycles, end_cycles).cycles
     benchmark = Cryterion(
         data_size, key_size, block_size, code_size, clock_cycles, duration, peak
     )
