@@ -131,7 +131,7 @@ def benchmark_fn(
     key_size: int,
     block_size: int,
     code_size: int,
-) -> Tuple[bytes, string]:
+) -> bytes:
 #    gc.collect()
 #    gc_old = gc.isenabled()
 #    gc.disable()
@@ -155,7 +155,7 @@ def benchmark_fn(
 #        data_size, key_size, block_size, code_size, clock_cycles, duration, peak
 #    )
 #    return result, benchmark
-    return result, "disabled for now"
+    return result
 
 
 def encrypt(
@@ -165,8 +165,7 @@ def encrypt(
     block_size: int,
     code_size: int,
 ) -> bytes:
-    result, benchmark = benchmark_fn(fn, data, key_size, block_size, code_size)
-    print(benchmark)
+    result = benchmark_fn(fn, data, key_size, block_size, code_size)
     return result
 
 
@@ -177,8 +176,7 @@ def decrypt(
     block_size: int,
     code_size: int,
 ) -> bytes:
-    result, benchmark = benchmark_fn(fn, data, key_size, block_size, code_size)
-    print(benchmark)
+    result = benchmark_fn(fn, data, key_size, block_size, code_size)
     return result
 
 
