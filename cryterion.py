@@ -1,4 +1,4 @@
-import os
+import platform
 import gc
 import random
 import socket
@@ -12,7 +12,7 @@ from platform import machine
 from typing import Tuple
 
 if machine().lower().startswith("arm"):
-    if os.name == 'Darwin':
+    if platform.system() == 'Darwin':
         pass
     else:
         from cyclops.cyclops import Cyclops
