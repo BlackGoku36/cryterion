@@ -155,7 +155,7 @@ def benchmark_fn(
 #        data_size, key_size, block_size, code_size, clock_cycles, duration, peak
 #    )
 #    return result, benchmark
-     return result, "disabled for now"
+    return result, "disabled for now"
 
 
 def encrypt(
