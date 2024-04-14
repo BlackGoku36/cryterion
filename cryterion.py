@@ -17,13 +17,14 @@ import sys
 
 if machine().lower().startswith("arm"):
     if platform.system() == 'Darwin':
-        sys.path.insert(0, '/Users/urjasvisuthar/BTP/end_game/repos/temp/applecounter')
-        from apple_counter import *
-        libname = pathlib.Path().absolute() / "libApplePerf.dylib"
-        c_lib = ctypes.CDLL(libname)
-        
-        events = AppleEvents()
-        c_lib.setup_performance_counters(pointer(events))
+        pass
+#        sys.path.insert(0, '/Users/urjasvisuthar/BTP/end_game/repos/temp/applecounter')
+#        from apple_counter import *
+#        libname = pathlib.Path().absolute() / "libApplePerf.dylib"
+#        c_lib = ctypes.CDLL(libname)
+#        
+#        events = AppleEvents()
+#        c_lib.setup_performance_counters(pointer(events))
     else:
         from cyclops.cyclops import Cyclops
 else:
@@ -146,24 +147,22 @@ def benchmark_fn(
     gc_old = gc.isenabled()
     gc.disable()
 
-    #apple_counter = AppleCounter()
-
     tracemalloc.start()
     start_time = time.process_time_ns()
-
     
-    counter_1 = Counter()
-    c_lib.get_counters(pointer(events), pointer(counter_1))
+#    counter_1 = Counter()
+#    c_lib.get_counters(pointer(events), pointer(counter_1))
 
-
-    #with Cyclops() as cyclops:
+    if platform.system() == 'Darwin':
+        result = fn(data)
+    else:
+        with Cyclops() as cyclops:
+            result = fn(data)
     #start_cycles = apple_counter.get_counter()
-    result = fn(data)
     #end_cycles = apple_counter.get_counter()
 
-    counter_2 = Counter()
-    c_lib.get_counters(pointer(events), pointer(counter_2))
-
+#    counter_2 = Counter()
+#    c_lib.get_counters(pointer(events), pointer(counter_2))
 
     duration = time.process_time_ns() - start_time
     _, peak = tracemalloc.get_traced_memory()
@@ -173,7 +172,12 @@ def benchmark_fn(
         gc.enable()
 
     data_size = len(data)
-    clock_cycles = counter_2.cycles - counter_1.cycles
+    if platform.system() == 'Darwin':
+        pass
+#        clock_cycles = counter_2.cycles - counter_1.cycles
+    else:
+        clock_cycles = cyclops.cycles
+
     benchmark = Cryterion(
         data_size, key_size, block_size, code_size, clock_cycles, duration, peak
     )
