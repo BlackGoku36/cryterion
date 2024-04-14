@@ -229,6 +229,7 @@ def unpad(padded_data: bytes) -> bytes:
 
 def sendall(data: bytes, host: str, port=8000):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.connect((host, port))
     s.sendall(data)
     s.close()
@@ -236,6 +237,7 @@ def sendall(data: bytes, host: str, port=8000):
 
 def recvall(host: str, port=8000, max_bufsize=100 * 1024) -> bytes:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind((host, port))
     s.listen()
     conn, addr = s.accept()
