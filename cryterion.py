@@ -10,10 +10,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from platform import machine
 from typing import Tuple
+import ctypes
+from ctypes import *
+import pathlib
+import sys
 
 if machine().lower().startswith("arm"):
     if platform.system() == 'Darwin':
-        import sys
         sys.path.insert(0, '/Users/urjasvisuthar/BTP/end_game/repos/temp/applecounter')
         from apple_counter import *
         libname = pathlib.Path().absolute() / "libApplePerf.dylib"
