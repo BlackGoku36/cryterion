@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "cryterion"
 version = "0.0.1"
-authors = [{ name = "virinci" }]
+authors = [{ name = "virinci" }, {name = "BlackGoku36"}]
 description = "A crypto benchmarking library in Python."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -16,4 +16,4 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/virinci/cryterion"
+Homepage = "https://github.com/BlackGoku36/cryterion"

@@ -1,3 +1,4 @@
+import os
 import gc
 import random
 import socket
@@ -11,7 +12,10 @@ from platform import machine
 from typing import Tuple
 
 if machine().lower().startswith("arm"):
-    from cyclops.cyclops import Cyclops
+    if os.name == 'Darwin':
+        pass
+    else:
+        from cyclops.cyclops import Cyclops
 else:
     from hwcounter import Timer as Cyclops
 
