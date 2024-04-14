@@ -138,15 +138,32 @@ def benchmark_fn(
     gc_old = gc.isenabled()
     gc.disable()
 
-    apple_counter = AppleCounter()
+    #apple_counter = AppleCounter()
 
     tracemalloc.start()
     start_time = time.process_time_ns()
 
+    libname = pathlib.Path().absolute() / "libApplePerf.dylib"
+    c_lib = ctypes.CDLL(libname)
+    
+    events = AppleEvents()
+    c_lib.setup_performance_counters(pointer(events))
+    
+    counter_1 = Counter()
+    c_lib.get_counters(pointer(events), pointer(counter_1))
+    print(counter_1.cycles)
+
+
     #with Cyclops() as cyclops:
-    start_cycles = apple_counter.get_counter()
+    #start_cycles = apple_counter.get_counter()
     result = fn(data)
-    end_cycles = apple_counter.get_counter()
+    #end_cycles = apple_counter.get_counter()
+
+    counter_2 = Counter()
+    c_lib.get_counters(pointer(events), pointer(counter_2))
+    print(counter_2.cycles)
+    print("Diff: " + str(counter_2.cycles - counter_1.cycles))
+
 
     duration = time.process_time_ns() - start_time
     _, peak = tracemalloc.get_traced_memory()
