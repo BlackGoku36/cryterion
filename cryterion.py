@@ -16,6 +16,11 @@ if machine().lower().startswith("arm"):
         import sys
         sys.path.insert(0, '/Users/urjasvisuthar/BTP/end_game/repos/temp/applecounter')
         from apple_counter import *
+        libname = pathlib.Path().absolute() / "libApplePerf.dylib"
+        c_lib = ctypes.CDLL(libname)
+        
+        events = AppleEvents()
+        c_lib.setup_performance_counters(pointer(events))
     else:
         from cyclops.cyclops import Cyclops
 else:
@@ -143,11 +148,6 @@ def benchmark_fn(
     tracemalloc.start()
     start_time = time.process_time_ns()
 
-    libname = pathlib.Path().absolute() / "libApplePerf.dylib"
-    c_lib = ctypes.CDLL(libname)
-    
-    events = AppleEvents()
-    c_lib.setup_performance_counters(pointer(events))
     
     counter_1 = Counter()
     c_lib.get_counters(pointer(events), pointer(counter_1))
