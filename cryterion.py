@@ -151,7 +151,6 @@ def benchmark_fn(
     
     counter_1 = Counter()
     c_lib.get_counters(pointer(events), pointer(counter_1))
-    print(counter_1.cycles)
 
 
     #with Cyclops() as cyclops:
@@ -161,8 +160,6 @@ def benchmark_fn(
 
     counter_2 = Counter()
     c_lib.get_counters(pointer(events), pointer(counter_2))
-    print(counter_2.cycles)
-    print("Diff: " + str(counter_2.cycles - counter_1.cycles))
 
 
     duration = time.process_time_ns() - start_time
@@ -173,7 +170,7 @@ def benchmark_fn(
         gc.enable()
 
     data_size = len(data)
-    clock_cycles = AppleCounter.get_results(start_cycles, end_cycles).cycles
+    clock_cycles = counter_2.cycles - counter_1.cycles
     benchmark = Cryterion(
         data_size, key_size, block_size, code_size, clock_cycles, duration, peak
     )
