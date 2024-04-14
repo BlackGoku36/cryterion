@@ -172,7 +172,7 @@ def benchmark_fn(
         gc.enable()
 
     data_size = len(data)
-    clock_cycles = 0
+    clock_cycles = 10000
     if platform.system() == 'Darwin':
         pass
 #        clock_cycles = counter_2.cycles - counter_1.cycles
