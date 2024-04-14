@@ -131,31 +131,30 @@ def benchmark_fn(
     key_size: int,
     block_size: int,
     code_size: int,
-) -> bytes:
-#    gc.collect()
-#    gc_old = gc.isenabled()
-#    gc.disable()
-#
-#    tracemalloc.start()
-#    start_time = time.process_time_ns()
-#
-#    with Cyclops() as cyclops:
+) -> Tuple[bytes, Cryterion]:
+    gc.collect()
+    gc_old = gc.isenabled()
+    gc.disable()
+
+    tracemalloc.start()
+    start_time = time.process_time_ns()
+
+    #with Cyclops() as cyclops:
     result = fn(data)
 
-#    duration = time.process_time_ns() - start_time
-#    _, peak = tracemalloc.get_traced_memory()
-#    tracemalloc.stop()
-#
-#    if gc_old is True:
-#        gc.enable()
-#
-#    data_size = len(data)
-#    clock_cycles = cyclops.cycles
-#    benchmark = Cryterion(
-#        data_size, key_size, block_size, code_size, clock_cycles, duration, peak
-#    )
-#    return result, benchmark
-    return result
+    duration = time.process_time_ns() - start_time
+    _, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+
+    if gc_old is True:
+        gc.enable()
+
+    data_size = len(data)
+    clock_cycles = 1000 #cyclops.cycles
+    benchmark = Cryterion(
+        data_size, key_size, block_size, code_size, clock_cycles, duration, peak
+    )
+    return result, benchmark
 
 
 def encrypt(
